@@ -39,6 +39,10 @@ Route::group(['prefix' => '/comment'], function(){
 //Auth
 Route::get('/create', [AuthController::class, 'create']);
 Route::post('/registr', [AuthController::class, 'registr']);
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'customLogin']);
+Route::get('/logout', [AuthController::class, 'logout']);
+
 
 Route::get('/', [MainController::class, 'index']);
 Route::get('galery/{img}', [MainController::class, 'show']);
