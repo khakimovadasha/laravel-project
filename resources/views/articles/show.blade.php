@@ -7,7 +7,7 @@
       <h6 class="card-subtitle mb-2 text-body-secondary">{{$article->short_desc}}</h6>
       <p class="card-text">{{$article->desc}}</p>
       <div class="d-inline-flex gap-1">
-          <a href="/article/{{$article->id}}/edit" class="btn btn-primary">Update article</a>
+          <a href="/article/{{$article->id}}/edit" class="btn btn-primary mr-3">Update article</a>
           <form action="/article/{{$article->id}}" method="post">
               @method('DELETE')
               @csrf
@@ -58,7 +58,7 @@
       <h6 class="card-subtitle mb-2 text-body-secondary">{{$comment->text}}</h6>
       @can('comment', $comment)
       <div class="d-inline-flex gap-1">
-        <a href="/comment/edit/{{$comment->id}}" class="btn btn-primary">Update comment</a>
+        <a href="/comment/edit/{{$comment->id}}" class="btn btn-primary mr-3">Update comment</a>
         <a href="/comment/delete/{{$comment->id}}" class="btn btn-secondary">Delete comment</a>
       </div>
       @endcan
