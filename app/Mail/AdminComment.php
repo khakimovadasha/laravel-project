@@ -9,24 +9,22 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
-use  App\Models\Article;
 
-
-
-class ArticleMail extends Mailable
+class AdminComment extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    protected $article;
 
-    public function __construct(Article $article)
+    protected $comment;
+    protected $article;
+    public function __construct(string $article, string $comment)
     {
         $this->article = $article;
+        $this->comment = $comment;
     }
-
 
     /**
      * Get the message envelope.
@@ -34,24 +32,24 @@ class ArticleMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            subject: 'Admin Comment',
             from: new Address('dasahakimova@gmail.com'),
-            subject: 'Article Mail',
         );
     }
-
 
     /**
      * Get the message content definition.
      */
     public function content(): Content
     {
-        
         return new Content(
-            view: 'mail.article',
+            view: 'mail.comment',
             with: [
-                'article' => $this->article,
+                'article'=>$this->article,
+                'comment'=>$this->comment,
             ]
         );
+            
     }
 
     /**
@@ -63,6 +61,4 @@ class ArticleMail extends Mailable
     {
         return [];
     }
-
-
 }

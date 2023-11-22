@@ -31,6 +31,16 @@
     @endif
   <div class="card-header">
     <h3>Comments</h3>
+    @isset($_GET['res'])
+    @if ($_GET['res'] == 1)
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+          Комментарий успешно добавлен и отправлен на модерацию.
+    </div>
+    @endif
+    @endisset
   </div>
   <div class="card-body">
       <form action="/comment/store" method="post">

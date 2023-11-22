@@ -41,16 +41,20 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      
-    <li class="nav-item">
-        <a class="nav-link" href="/article/create">Create Article<span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/contacts">Contact</a>
-      </li>
+      @can('create')
+        <li class="nav-item">
+          <a class="nav-link" href="/article/create">Create Article<span class="sr-only">(current)</span></a>
+        </li>
+      @endcan
+        <li class="nav-item">
+          <a class="nav-link" href="/comment">Comments <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contacts">Contact</a>
+        </li>
       <!-- <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
           Dropdown
