@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
     export default {
     data() { return { msg: null } },
         created() {
@@ -9,4 +9,7 @@
             })
         }
     }
-</script>
+</script> -->
+<template>
+    <h3>Test</h3>
+</template>
