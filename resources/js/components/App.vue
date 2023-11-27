@@ -1,15 +1,17 @@
-<!-- <script>
-    export default {
-    data() { return { msg: null } },
-        created() {
-            window.Echo.channel('my-channel').listen('ArticleCreateEvent', (name) => {
-                console.log(name);
-                this.msg=name.name;
-                // alert('Добавлена новая статья!');
-            })
-        }
-    }
-</script> -->
 <template>
-    <h3>Test</h3>
-</template>
+    <div v-show="this.msg !== null" class="alert  alert-primary" role="alert">
+    Добавлен новый комментарий к статье <a :href="`/article/${this.article.id}`"><strong>{{this.article.name}}</strong></a> 
+    </div>
+    </template>
+    
+    <script>
+        export default {
+        data() { return { article:null } },
+            created() {
+                window.Echo.channel('test').listen('EventNewComment', (article) => {
+                    console.log(article);
+                    this.article=article.article;
+                })
+            }
+        }
+    </script>
