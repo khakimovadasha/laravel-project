@@ -1,17 +1,17 @@
 <template>
-    <div v-show="this.msg !== null" class="alert  alert-primary" role="alert">
+    <div v-show="this.article !== null" class="alert  alert-primary" role="alert">
     Добавлен новый комментарий к статье <a :href="`/article/${this.article.id}`"><strong>{{this.article.name}}</strong></a> 
     </div>
-    </template>
+</template>
     
-    <script>
-        export default {
-        data() { return { article:null } },
-            created() {
-                window.Echo.channel('test').listen('EventNewComment', (article) => {
-                    console.log(article);
-                    this.article=article.article;
-                })
-            }
+<script>
+    export default {
+    data() { return { article:null } },
+        created() {
+            window.Echo.channel('test').listen('EventNewComment', (article) => {
+                console.log(article);
+                this.article=article.article;
+            })
         }
-    </script>
+    }
+</script>
