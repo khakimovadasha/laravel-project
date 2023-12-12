@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Models\Article;
 use App\Models\Comment;
@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Jobs\ArticleMailJob;
 use App\Events\EventNewComment;
+use App\Http\Controllers\Controller;
+
 
 class ArticleController extends Controller
 {
@@ -24,7 +26,7 @@ class ArticleController extends Controller
         $articles = Cache::remember('articles'.$page, 3000, function () {
             return Article::latest()->paginate(5);
         });
-        return view('articles.main', ['articles'=>$articles]);
+        return response()->json(['articles'=>$articles]);
     }
 
     /**
@@ -32,8 +34,8 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        Gate::authorize('create', [self::class]);
-        return view('articles.create');
+        // Gate::authorize('create', [self::class]);
+        // return view('articles.create');
     }
 
     /**
@@ -41,6 +43,7 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', [self::class]);
         $request->validate([
             'title' => 'required',
             'shortDesc' => 'required|min:5'
@@ -60,7 +63,10 @@ class ArticleController extends Controller
                 Cache::forget($key->key);
             }
         }
-        return redirect('/article');
+        return response()->json([
+            'res'=>$res,
+            'article'=>$article
+        ]);
     }
 
     /**
@@ -81,7 +87,7 @@ class ArticleController extends Controller
         });
 
 
-        return view('articles.show', ['article'=>$article, 'comments'=>$comments]);
+        return response()->json(['article'=>$article, 'comments'=>$comments]);
     }
 
     /**
@@ -90,7 +96,7 @@ class ArticleController extends Controller
     public function edit(Article $article)
     {
         Gate::authorize('update', [self::class, $article]);
-        return view('articles.edit', ['article'=>$article]);
+        return response()->json(['article'=>$article]);
     }
 
     /**
@@ -98,6 +104,7 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
+        Gate::authorize('update', [self::class, $article]);
         $request->validate([
             'title' => 'required',
             'shortDesc' => 'required|min:5'
@@ -118,7 +125,7 @@ class ArticleController extends Controller
                 Cache::forget($key->key);
             }
         }
-        return redirect()->route('article.show', ['article'=>$article]);
+        return response()->json(['res'=> $res, 'article'=>$article]);
     }
 
     /**
@@ -143,6 +150,6 @@ class ArticleController extends Controller
                 Cache::forget($key->key);
             }
         }
-        return redirect('/article');
+        return response($res);
     }
 }

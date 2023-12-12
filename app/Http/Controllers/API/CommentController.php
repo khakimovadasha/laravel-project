@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Models\Comment;
@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\AdminComment;
 use App\Notifications\NotifyNewComment;
 use App\Events\EventNewComment;
+use App\Http\Controllers\Controller;
 
 
 
@@ -35,7 +36,7 @@ class CommentController extends Controller
                 'articles'=>$articles,
             ];
         });        
-        return view('comments.index', ['comments'=>$data['comments'], 'articles'=>$data['articles']]);
+        return response()->json(['comments'=>$data['comments'], 'articles'=>$data['articles']]);
     }
 
     public function accept(int $id){
@@ -55,7 +56,7 @@ class CommentController extends Controller
                 Cache::forget($key->key);
             }  
         }
-        return redirect()->route('comments');
+        return response($res);
     }
 
     public function reject(int $id){
@@ -73,7 +74,7 @@ class CommentController extends Controller
                 Cache::forget($key->key);
             }
         }
-        return redirect()->route('comments');
+        return response($res);
     }
 
 
@@ -94,7 +95,6 @@ class CommentController extends Controller
         if ($res) {
            Mail::to('dasahakimova@gmail.com')->send(new AdminComment($article->name, $comment->text));
             // $users->notify(new NotifyNewComment($article->name)); //вызывает ошибку, так как нельзя отправить от массива объектов
-            //Отправка уведомлений пользователям 
             Notification::send($users, new NotifyNewComment($article));
             if ($res){
                 $keys = DB::table('cache')->whereRaw('`key` GLOB :key', [':key'=>'comments*[0-9]'])->get();
@@ -103,13 +103,13 @@ class CommentController extends Controller
                 }
             }
         }
-        return redirect()->route('article.show', ['article'=>$request->article_id, 'res'=>$res]);
+        return response()->json(['article'=>$request->article_id, 'res'=>$res]);
     }
 
     public function edit($id){
         $comment = Comment::findOrFail($id);
         Gate::authorize('comment', $comment);
-        return view('comments.edit', ['comment'=>$comment]);
+        return response()->json(['comment'=>$comment]);
     }
 
     public function update($id, Request $request){
@@ -134,7 +134,7 @@ class CommentController extends Controller
                 Cache::forget($key->key);
             }
         }
-        return redirect()->route('article.show', ['article'=>$request->article_id]);
+        return response()->json(['res'=> $res, 'article'=>$request->article_id]);
     }
 
     public function delete($id){
@@ -152,6 +152,6 @@ class CommentController extends Controller
                 Cache::forget($key->key);
             }
         }
-        return redirect()->route('article.show', ['article'=>$article_id]);
+        return response()->json(['res'=>$res, 'article'=>$article_id]);
     }
 }
